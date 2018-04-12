@@ -1,0 +1,21 @@
+---
+- import_tasks: check_system.yml
+
+- name: Create configuration directory
+  shell: mkdir -p /usr/share/kibana/config
+
+- name: Create default configuration files for kibana
+  template:
+    src: kibana.yml.j2
+    dest: /usr/share/kibana/config/kibana.yml
+
+- name: 'Run kibana docker container version {{ version }}'
+  docker_container:
+    name: kibana
+    image: 'docker.elastic.co/kibana/kibana-oss:{{ version }}'
+    ports:
+      - '{{ http_port }}:5601'
+    volumes:
+      - /usr/share/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    recreate: yes
+    restart_policy: unless-stopped

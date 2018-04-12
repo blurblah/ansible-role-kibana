@@ -1,0 +1,7 @@
+---
+version: 6.2.3
+server_name: kibana
+http_port: 5601
+es:
+  host: '{{ ansible_default_ipv4.address }}'
+  port: 9200
